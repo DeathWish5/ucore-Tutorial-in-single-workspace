@@ -8,6 +8,12 @@ build/
 *.bin
 *.img
 
+# Tools
+fs-pack/fs_pack
+
+# Keep rustsbi-qemu.bin
+!/rustsbi-qemu.bin
+
 # Editor files
 *.swp
 *.swo

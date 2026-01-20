@@ -285,7 +285,12 @@ static long do_read(int fd, void *buf, size_t count) {
 
     if (fd == FD_STDIN) {
         for (size_t i = 0; i < count; i++) {
-            kbuf[i] = console_getchar();
+            int c;
+            /* 等待有效输入（console_getchar 在无输入时返回 -1） */
+            while ((c = console_getchar()) < 0) {
+                /* 忙等待 */
+            }
+            kbuf[i] = (char)c;
         }
         return count;
     }
@@ -504,8 +509,7 @@ void main(void) {
         puts("[PANIC] initproc not found in fs!");
         shutdown();
     }
-
-    size_t initproc_len;
+    size_t initproc_len = 0;
     uint8_t *initproc_data = read_all(initproc_fh, &initproc_len);
     file_close(initproc_fh);
 

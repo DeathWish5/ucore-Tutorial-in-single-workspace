@@ -5,8 +5,9 @@ OBJCOPY = riscv64-linux-musl-objcopy
 QEMU = qemu-system-riscv64
 
 BUILD_DIR = build
-BIOS = ../../rustsbi-qemu.bin
+BIOS = ../rustsbi-qemu.bin
 USER_DIR = ../user
+FS_PACK = ../fs-pack/fs_pack
 FS_IMG = $(BUILD_DIR)/fs.img
 
 CFLAGS = -march=rv64gc -mabi=lp64d -mcmodel=medany \
@@ -31,17 +32,25 @@ ALL_OBJS = $(KERNEL_OBJS) $(LIB_OBJS)
 ELF = $(BUILD_DIR)/ch8.elf
 BIN = $(BUILD_DIR)/ch8.bin
 
-.PHONY: all build run clean user
+# ch8 应用程序列表
+USER_APPS = 00hello_world 02power 12forktest initproc user_shell filetest_simple cat_filea sig_simple
+
+.PHONY: all build run clean user fs_pack
 
 all: build
 
 user:
-	cd $(USER_DIR) && $(MAKE) clean && $(MAKE)
+	cd $(USER_DIR) && $(MAKE) clean && $(MAKE) $(USER_APPS)
 
-$(FS_IMG): user
+# 构建 fs_pack 工具
+$(FS_PACK):
+	cd ../fs-pack && $(MAKE)
+
+# 创建文件系统镜像（使用 C 版本的 fs_pack 工具）
+$(FS_IMG): user $(FS_PACK)
 	@mkdir -p $(BUILD_DIR)
-	cd ../.. && cargo run --release -p xtask -- make --ch 8
-	cp ../../target/riscv64gc-unknown-none-elf/debug/fs.img $(FS_IMG)
+	@echo "Creating fs.img using C fs_pack tool..."
+	$(FS_PACK) $(FS_IMG) $(USER_DIR)/build $(USER_APPS)
 
 build: $(BIN) $(FS_IMG)
 

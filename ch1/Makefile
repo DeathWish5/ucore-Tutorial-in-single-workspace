@@ -5,7 +5,7 @@ OBJCOPY = riscv64-linux-musl-objcopy
 QEMU = qemu-system-riscv64
 
 BUILD_DIR = build
-BIOS = ../../rustsbi-qemu.bin
+BIOS = ../rustsbi-qemu.bin
 
 CFLAGS = -march=rv64gc -mabi=lp64d -mcmodel=medany \
          -ffreestanding -fno-common -nostdlib \

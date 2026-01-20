@@ -6,7 +6,7 @@ OBJDUMP = riscv64-linux-musl-objdump
 QEMU = qemu-system-riscv64
 
 BUILD_DIR = build
-BIOS = ../../rustsbi-qemu.bin
+BIOS = ../rustsbi-qemu.bin
 USER_DIR = ../user
 
 CFLAGS = -march=rv64gc -mabi=lp64d -mcmodel=medany \

@@ -169,9 +169,13 @@ void print_str(const char *s) {
     while (*s) putchar(*s++);
 }
 
-void print_int(unsigned int n) {
+void print_int(int n) {
     char buf[12];
     int i = 0;
+    if (n < 0) {
+        putchar('-');
+        n = -n;
+    }
     if (n == 0) {
         putchar('0');
         return;

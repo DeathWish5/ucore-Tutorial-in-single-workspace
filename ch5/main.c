@@ -220,7 +220,12 @@ static long do_read(int fd, void *buf, size_t count) {
         if (!dst) return -1;
 
         for (size_t i = 0; i < count; i++) {
-            dst[i] = console_getchar();
+            int c;
+            /* 等待有效输入（console_getchar 在无输入时返回 -1） */
+            while ((c = console_getchar()) < 0) {
+                /* 忙等待 */
+            }
+            dst[i] = (char)c;
         }
         return count;
     }

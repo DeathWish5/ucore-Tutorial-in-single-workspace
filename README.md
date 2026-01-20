@@ -24,14 +24,16 @@ c/
 ├── virtio-block/        # VirtIO 块设备驱动
 ├── signal/              # 信号处理
 ├── sync/                # 同步原语
-└── util/                # 工具函数（printf, sbi 等）
+├── fs-pack/             # 文件系统镜像打包工具
+├── util/                # 工具函数（printf, sbi 等）
+└── rustsbi-qemu.bin     # RustSBI QEMU 固件
 ```
 
 ## 环境要求
 
 - **交叉编译器**: `riscv64-linux-musl-gcc` (推荐) 或 `riscv64-unknown-elf-gcc`
 - **QEMU**: `qemu-system-riscv64` (版本 >= 5.0)
-- **Rust 工具链**: 用于生成 `fs.img` (ch6-ch8)
+- **主机编译器**: `gcc` (用于构建 `fs_pack` 工具)
 
 ### 安装交叉编译器 (Ubuntu/Debian)
 
@@ -52,6 +54,13 @@ export PATH=$PATH:$(path to cross)/riscv64-unknown-elf-gcc/bin
 ### 安装 QEMU
 
 可参考：https://rcore-os.cn/rCore-Tutorial-Book-v3/chapter0/5setup-devel-env.html#id2
+
+### RustSBI QEMU
+
+项目根目录下的 `rustsbi-qemu.bin` 是 RISC-V SBI 固件，用于在 QEMU 中引导内核。
+该文件已包含在仓库中，无需额外下载。
+
+如需手动获取，可从 [RustSBI 发布页](https://github.com/rustsbi/rustsbi-qemu/releases) 下载。
 
 ## 快速开始
 
@@ -123,7 +132,6 @@ user/bin/
 
 1. **帧分配器**: 当前使用简单的堆分配，未实现真正的物理帧分配器
 2. **内存释放**: `as_destroy` 和 `heap_free` 为空实现（内存泄漏）
-3. **fs.img**: ch6-ch8 使用 Rust xtask 生成的 fs.img
 
 ## 参考资料
 

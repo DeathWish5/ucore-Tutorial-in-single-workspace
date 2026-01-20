@@ -91,7 +91,7 @@ static inline int wait(int *exit_code) {
 void putchar(char c);
 void puts(const char *s);
 void print_str(const char *s);
-void print_int(unsigned int n);
+void print_int(int n);
 void print_long(unsigned long n);
 
 /* 字符串操作 */

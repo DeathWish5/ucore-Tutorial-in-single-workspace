@@ -38,7 +38,11 @@ int main(void) {
                 } else {
                     /* 父进程等待子进程 */
                     int exit_code = 0;
-                    int exit_pid = sys_waitpid(pid, &exit_code);
+                    int exit_pid;
+                    /* 循环等待直到子进程退出（waitpid 返回 -2 表示子进程还在运行） */
+                    while ((exit_pid = sys_waitpid(pid, &exit_code)) == -2) {
+                        sys_sched_yield();
+                    }
                     print_str("Shell: Process ");
                     print_int(exit_pid);
                     print_str(" exited with code ");
