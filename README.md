@@ -1,6 +1,6 @@
 # rCore Tutorial - C 语言版本
 
-这是 [rCore-Tutorial](https://github.com/rcore-os/rCore-Tutorial-v3) 的 C 语言移植版本，旨在让不熟悉 Rust 的学习者也能学习操作系统内核开发。
+这是 [rCore-Tutorial](https://github.com/rcore-os/rCore-Tutorial-v3) 的 C 语言移植版本。
 
 ## 项目结构
 
@@ -31,26 +31,27 @@ c/
 
 - **交叉编译器**: `riscv64-linux-musl-gcc` (推荐) 或 `riscv64-unknown-elf-gcc`
 - **QEMU**: `qemu-system-riscv64` (版本 >= 5.0)
-- **RustSBI**: 项目根目录下的 `rustsbi-qemu.bin`
 - **Rust 工具链**: 用于生成 `fs.img` (ch6-ch8)
 
 ### 安装交叉编译器 (Ubuntu/Debian)
 
 ```bash
-# 方法 1: 使用 musl 工具链 (推荐)
-wget https://musl.cc/riscv64-linux-musl-cross.tgz
-tar xf riscv64-linux-musl-cross.tgz
-export PATH=$PATH:$(pwd)/riscv64-linux-musl-cross/bin
+# musl 工具链
+wget https://more.musl.cc/9.2.1-20190831/x86_64-linux-musl/riscv64-linux-musl-cross.tgz
+# 2021.3.1更新：上面的网站发生了"Catastrophic disk failure"，暂时处于不可用状态。可从清华云盘下载：https://cloud.tsinghua.edu.cn/f/cc4af959a6fc469e8564/
+tar xzvf riscv64-linux-musl-cross.tgz
+export PATH=$PATH:$(path to cross)/riscv64-linux-musl-cross/bin
 
-# 方法 2: 使用发行版包
-sudo apt install gcc-riscv64-unknown-elf
+# gdb 等其他工具链（非必须）
+wget https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.08/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14.tar.gz
+tar xzvf riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14.tar.gz
+mv riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14 riscv64-unknown-elf-gcc
+export PATH=$PATH:$(path to cross)/riscv64-unknown-elf-gcc/bin
 ```
 
 ### 安装 QEMU
 
-```bash
-sudo apt install qemu-system-misc
-```
+可参考：https://rcore-os.cn/rCore-Tutorial-Book-v3/chapter0/5setup-devel-env.html#id2
 
 ## 快速开始
 
@@ -95,18 +96,7 @@ make clean-all
 
 每个 chapter 目录下都可以使用 GDB 调试：
 
-```bash
-# 终端 1: 启动 QEMU 并等待 GDB 连接
-cd ch2
-qemu-system-riscv64 -machine virt -nographic -bios ../../rustsbi-qemu.bin \
-    -kernel build/ch2.bin -s -S
-
-# 终端 2: 启动 GDB
-riscv64-unknown-elf-gdb build/ch2.elf
-(gdb) target remote :1234
-(gdb) break main
-(gdb) continue
-```
+// TODO ...
 
 ## 用户程序
 
@@ -138,8 +128,8 @@ user/bin/
 ## 参考资料
 
 - [rCore-Tutorial-Book-v3](https://rcore-os.cn/rCore-Tutorial-Book-v3/)
+- [uCore-Tutorial-Book-v3](https://github.com/DeathWish5/ucore-Tutorial-Book/blob/main/lab0/%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.md)
 - [RISC-V 特权级规范](https://riscv.org/specifications/privileged-isa/)
-- [xv6-riscv](https://github.com/mit-pdos/xv6-riscv)
 
 ## License
 
